@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎂 Surprise d'Anniversaire</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --violet: #7c3aed;
+            --pink: #ec4899;
+            --yellow: #facc15;
+            --turquoise: #06b6d4;
+            --orange: #f97316;
+            --green: #22c55e;
+            --bg-gradient: linear-gradient(135deg, #7c3aed 0%, #ec4899 50%, #f97316 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            background: var(--bg-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Floating background shapes */
+        .bg-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bg-shapes span {
+            position: absolute;
+            display: block;
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: floatUp linear infinite;
+        }
+
+        .bg-shapes span:nth-child(1) { width: 80px; height: 80px; left: 10%; animation-duration: 12s; animation-delay: 0s; }
+        .bg-shapes span:nth-child(2) { width: 40px; height: 40px; left: 25%; animation-duration: 10s; animation-delay: 2s; }
+        .bg-shapes span:nth-child(3) { width: 70px; height: 70px; left: 40%; animation-duration: 14s; animation-delay: 1s; }
+        .bg-shapes span:nth-child(4) { width: 50px; height: 50px; left: 55%; animation-duration: 11s; animation-delay: 3s; }
+        .bg-shapes span:nth-child(5) { width: 90px; height: 90px; left: 70%; animation-duration: 13s; animation-delay: 0.5s; }
+        .bg-shapes span:nth-child(6) { width: 35px; height: 35px; left: 85%; animation-duration: 9s;  animation-delay: 4s; }
+        .bg-shapes span:nth-child(7) { width: 65px; height: 65px; left: 5%;  animation-duration: 15s; animation-delay: 2.5s; }
+        .bg-shapes span:nth-child(8) { width: 45px; height: 45px; left: 60%; animation-duration: 10s; animation-delay: 1.5s; }
+
+        @keyframes floatUp {
+            0% { transform: translateY(110vh) rotate(0deg); opacity: 0.6; }
+            100% { transform: translateY(-20vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Screens */
+        .screen {
+            display: none;
+            width: 100%;
+            max-width: 520px;
+            padding: 20px;
+            z-index: 10;
+            position: relative;
+            animation: fadeSlideIn 0.6s ease;
+        }
+
+        .screen.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Card */
+        .card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 40px 32px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            text-align: center;
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--violet), var(--pink), var(--yellow), var(--turquoise));
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--violet), var(--pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #1e1b4b;
+            margin-bottom: 16px;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .emoji-big {
+            font-size: 4rem;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        /* Input & Button */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 1.05rem;
+            font-family: 'Poppins', sans-serif;
+            border: 2px solid #e5e7eb;
+            border-radius: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        input:focus {
+            border-color: var(--violet);
+            box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.15);
+        }
+
+        input.error {
+            border-color: #ef4444;
+            animation: shake 0.5s ease;
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-10px); }
+            40% { transform: translateX(10px); }
+            60% { transform: translateX(-6px); }
+            80% { transform: translateX(6px); }
+        }
+
+        .btn {
+            padding: 16px 32px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, var(--violet), var(--pink));
+            box-shadow: 0 8px 24px rgba(124, 58, 237, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(124, 58, 237, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* Progress bar */
+        .progress-container {
+            width: 100%;
+            margin-bottom: 24px;
+        }
+
+        .progress-label {
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 100px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--violet), var(--pink), var(--orange));
+            border-radius: 100px;
+            transition: width 0.6s ease;
+        }
+
+        /* Enigma content */
+        .enigma-content {
+            background: #f8f7ff;
+            border-radius: 16px;
+            padding: 24px 20px;
+            margin: 16px 0;
+            border-left: 4px solid var(--violet);
+            text-align: left;
+        }
+
+        .enigma-content p {
+            color: #374151;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+
+        .enigma-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .cipher-text {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: 16px;
+            color: var(--violet);
+            text-align: center;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Caesar image */
+        .caesar-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .caesar-numeral {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #b8860b;
+            font-family: 'Times New Roman', serif;
+            letter-spacing: 4px;
+            margin-bottom: 8px;
+        }
+
+        .caesar-bust {
+            width: 120px;
+            height: 120px;
+            position: relative;
+        }
+
+        .caesar-bust svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Charade styling */
+        .charade-part {
+            padding: 12px 16px;
+            margin: 8px 0;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            font-style: italic;
+            color: #374151;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .charade-label {
+            font-weight: 700;
+            color: var(--violet);
+            font-style: normal;
+            display: block;
+            margin-bottom: 4px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Acrostic */
+        .acrostic-line {
+            font-style: italic;
+            color: #374151;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            text-align: left;
+        }
+
+        .acrostic-line::first-letter {
+            font-weight: 400;
+            color: #374151;
+        }
+
+        /* Success message */
+        .success-msg {
+            display: none;
+            color: var(--green);
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-top: 12px;
+            animation: fadeSlideIn 0.4s ease;
+        }
+
+        .success-msg.visible {
+            display: block;
+        }
+
+        /* Final screen */
+        .final-emoji {
+            font-size: 5rem;
+            animation: bounce 1s ease infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .final-message {
+            background: linear-gradient(135deg, #fdf2f8, #faf5ff);
+            border-radius: 16px;
+            padding: 28px 24px;
+            margin: 20px 0;
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: #374151;
+            border: 2px solid #f3e8ff;
+        }
+
+        .indices-reveal {
+            margin-top: 20px;
+            padding: 16px;
+            background: #f8f7ff;
+            border-radius: 12px;
+        }
+
+        .indices-reveal h3 {
+            font-size: 0.9rem;
+            color: var(--violet);
+            margin-bottom: 12px;
+        }
+
+        .indice-chip {
+            display: inline-block;
+            padding: 6px 16px;
+            margin: 4px;
+            background: linear-gradient(135deg, var(--violet), var(--pink));
+            color: white;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Confetti canvas */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .card {
+                padding: 32px 20px;
+                border-radius: 20px;
+            }
+
+            h1 {
+                font-size: 1.6rem;
+            }
+
+            .cipher-text {
+                font-size: 2rem;
+                letter-spacing: 12px;
+            }
+
+            .charade-part {
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Intro screen specific */
+        .intro-list {
+            text-align: left;
+            margin: 16px 0;
+        }
+
+        .intro-list li {
+            padding: 8px 0;
+            color: #374151;
+            font-size: 0.95rem;
+            list-style: none;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .intro-list li::before {
+            content: '✨';
+            flex-shrink: 0;
+        }
+
+        /* Enigma number badge */
+        .enigma-badge {
+            display: inline-block;
+            padding: 4px 14px;
+            background: linear-gradient(135deg, var(--violet), var(--pink));
+            color: white;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        /* Error text */
+        .error-text {
+            color: #ef4444;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .error-text.visible {
+            display: block;
+            animation: fadeSlideIn 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background shapes -->
+    <div class="bg-shapes">
+        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
+    </div>
+
+    <!-- Confetti canvas -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- ==================== PASSCODE SCREEN ==================== -->
+    <div class="screen active" id="screen-passcode">
+        <div class="card">
+            <span class="emoji-big">🔒</span>
+            <h1>Accès Privé</h1>
+            <p class="subtitle">Entre le mot de passe secret pour continuer...</p>
+            <div class="input-group">
+                <input type="password" id="passcode-input" placeholder="Mot de passe..." autocomplete="off">
+                <button class="btn" onclick="checkPasscode()">Entrer</button>
+            </div>
+            <p class="error-text" id="passcode-error">Mauvais mot de passe, essaie encore ! 🙈</p>
+        </div>
+    </div>
+
+    <!-- ==================== INTRO SCREEN ==================== -->
+    <div class="screen" id="screen-intro">
+        <div class="card">
+            <span class="emoji-big">🎉</span>
+            <h1>Joyeux Anniversaire !</h1>
+            <p class="subtitle">Une surprise t'attend... mais tu vas devoir la mériter !</p>
+            <div class="enigma-content">
+                <p>Pour découvrir ce qui se prépare, tu vas devoir résoudre <strong>4 énigmes</strong>.</p>
+                <p>Chaque bonne réponse te donnera un <strong>indice</strong> sur ta surprise et débloquera l'énigme suivante.</p>
+            </div>
+            <ul class="intro-list">
+                <li>Les réponses sont des mots simples</li>
+                <li>Pas d'indices supplémentaires — à toi de chercher !</li>
+                <li>Ta progression est sauvegardée</li>
+            </ul>
+            <div class="input-group">
+                <button class="btn" onclick="showScreen('screen-enigma')">C'est parti ! 🚀</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== ENIGMA SCREEN ==================== -->
+    <div class="screen" id="screen-enigma">
+        <div class="card">
+            <div class="progress-container">
+                <div class="progress-label" id="progress-label">Énigme 1 / 4</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <span class="enigma-badge" id="enigma-badge">Énigme 1</span>
+
+            <div id="enigma-body">
+                <!-- Dynamically filled -->
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="answer-input" placeholder="Ta réponse..." autocomplete="off">
+                <button class="btn" onclick="checkAnswer()">Valider ✓</button>
+            </div>
+            <p class="error-text" id="answer-error">Ce n'est pas la bonne réponse... 🤔</p>
+            <p class="success-msg" id="answer-success">Bravo ! 🎉</p>
+        </div>
+    </div>
+
+    <!-- ==================== FINAL SCREEN ==================== -->
+    <div class="screen" id="screen-final">
+        <div class="card">
+            <span class="final-emoji">🎂</span>
+            <h1>Félicitations !</h1>
+            <h2>Tu as résolu toutes les énigmes !</h2>
+            <div class="final-message" id="final-message">
+                <!-- PLACEHOLDER: Remplace ce texte par ton message personnalisé -->
+                Bravo mon amour ! Tu as tout trouvé ! 💕<br><br>
+                Ces 4 indices devraient te mettre sur la piste de ta surprise...<br><br>
+                Je t'aime ❤️
+            </div>
+            <div class="indices-reveal">
+                <h3>🧩 Tes 4 indices :</h3>
+                <div id="indices-chips"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        //  CONFIGURATION — Modifie ici les énigmes et les réponses
+        // ============================================================
+
+        const PASSCODE = 'anniversaire26';
+
+        const ENIGMAS = [
+            {
+                answer: 'mise',
+                html: `
+                    <div class="cipher-text">BXHT</div>
+                    <div class="caesar-container">
+                        <div class="caesar-numeral">XV</div>
+                        <div class="caesar-bust">
+                            <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Laurel wreath left -->
+                                <path d="M30 35 Q25 25, 35 20 Q28 18, 32 12 Q26 15, 22 22 Q18 30, 25 38 Z" fill="#b8860b" opacity="0.7"/>
+                                <path d="M28 42 Q20 35, 26 28 Q20 25, 22 18 Q15 22, 15 32 Q16 40, 24 46 Z" fill="#b8860b" opacity="0.6"/>
+                                <path d="M32 48 Q22 44, 25 36 Q18 35, 18 28 Q12 34, 14 42 Q18 50, 28 52 Z" fill="#b8860b" opacity="0.5"/>
+                                <!-- Laurel wreath right -->
+                                <path d="M90 35 Q95 25, 85 20 Q92 18, 88 12 Q94 15, 98 22 Q102 30, 95 38 Z" fill="#b8860b" opacity="0.7"/>
+                                <path d="M92 42 Q100 35, 94 28 Q100 25, 98 18 Q105 22, 105 32 Q104 40, 96 46 Z" fill="#b8860b" opacity="0.6"/>
+                                <path d="M88 48 Q98 44, 95 36 Q102 35, 102 28 Q108 34, 106 42 Q102 50, 92 52 Z" fill="#b8860b" opacity="0.5"/>
+                                <!-- Head -->
+                                <ellipse cx="60" cy="45" rx="22" ry="28" fill="#d4a574"/>
+                                <!-- Hair/wreath base -->
+                                <ellipse cx="60" cy="30" rx="20" ry="12" fill="#8B7355"/>
+                                <!-- Eyes -->
+                                <ellipse cx="52" cy="43" rx="2.5" ry="1.5" fill="#2d1b0e"/>
+                                <ellipse cx="68" cy="43" rx="2.5" ry="1.5" fill="#2d1b0e"/>
+                                <!-- Nose -->
+                                <path d="M60 44 L58 52 L62 52 Z" fill="#c49460" opacity="0.6"/>
+                                <!-- Mouth -->
+                                <path d="M54 57 Q60 61, 66 57" stroke="#b8860b" stroke-width="1.5" fill="none" opacity="0.5"/>
+                                <!-- Neck -->
+                                <rect x="52" y="70" width="16" height="12" rx="4" fill="#d4a574"/>
+                                <!-- Toga -->
+                                <path d="M35 82 Q40 75, 52 78 L52 82 L68 82 L68 78 Q80 75, 85 82 L90 110 L30 110 Z" fill="#f5f0e8"/>
+                                <path d="M45 82 Q55 88, 60 82 Q65 88, 75 82" stroke="#d4c5a9" stroke-width="1.5" fill="none"/>
+                                <!-- Toga drape -->
+                                <path d="M42 85 Q50 95, 48 110" stroke="#d4c5a9" stroke-width="1" fill="none"/>
+                                <path d="M78 85 Q70 95, 72 110" stroke="#d4c5a9" stroke-width="1" fill="none"/>
+                            </svg>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                answer: 'astronomie',
+                html: `
+                    <div class="enigma-content" style="border-left-color: var(--pink);">
+                        <div class="charade-part">
+                            <span class="charade-label">Mon premier</span>
+                            L'unité souveraine qui, au sommet d'une main, ne peut être renversée par aucun roi.
+                        </div>
+                        <div class="charade-part">
+                            <span class="charade-label">Mon deuxième</span>
+                            L'adverbe de l'excès.
+                        </div>
+                        <div class="charade-part">
+                            <span class="charade-label">Mon troisième</span>
+                            Le théâtre des masques immobiles, là où le geste survit au mot depuis six siècles au pays du Soleil Levant.
+                        </div>
+                        <div class="charade-part">
+                            <span class="charade-label">Mon dernier</span>
+                            Je suis l'âme du pain.
+                        </div>
+                    </div>
+                `
+            },
+            {
+                answer: 'matin',
+                html: `
+                    <div class="enigma-content" style="border-left-color: var(--turquoise);">
+                        <p>Selon la célèbre devinette du lion de pierre égyptien, un être change de posture au fil des heures du jour.</p>
+                        <p><strong>Je ne cherche pas cet être.</strong></p>
+                        <p>Je cherche le nom de cette première heure — celle où l'on avance encore à quatre appuis, bien avant que le soleil n'atteigne son zénith.</p>
+                    </div>
+                `
+            },
+            {
+                answer: 'eliot',
+                html: `
+                    <div class="enigma-content" style="border-left-color: var(--orange);">
+                        <p class="acrostic-line">Enfant, je rêvais de voyages lointains et d'aventures impossibles.</p>
+                        <p class="acrostic-line">Les étés passaient, chacun plus beau que le précédent.</p>
+                        <p class="acrostic-line">Il m'arrivait de m'endormir dehors, sous les étoiles.</p>
+                        <p class="acrostic-line">On m'appelait pour rentrer, mais je n'entendais rien.</p>
+                        <p class="acrostic-line">Tout ce que je voulais, c'était rester là, libre.</p>
+                    </div>
+                    <p style="color: #6b7280; font-size: 0.9rem; font-style: italic; margin-top: 12px;">
+                        La réponse se cache dans ces lignes.
+                    </p>
+                `
+            }
+        ];
+
+        const FINAL_MESSAGE = `
+            Bravo mon amour ! Tu as tout trouvé ! 💕<br><br>
+            Ces 4 indices devraient te mettre sur la piste de ta surprise...<br><br>
+            Je t'aime ❤️
+        `;
+
+        // ============================================================
+        //  STATE
+        // ============================================================
+
+        let currentEnigma = parseInt(localStorage.getItem('enigmaProgress') || '0');
+        let authenticated = localStorage.getItem('authenticated') === 'true';
+
+        // ============================================================
+        //  SCREENS
+        // ============================================================
+
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            const screen = document.getElementById(id);
+            screen.classList.remove('active');
+            // Force reflow for animation
+            void screen.offsetWidth;
+            screen.classList.add('active');
+        }
+
+        // ============================================================
+        //  PASSCODE
+        // ============================================================
+
+        function checkPasscode() {
+            const input = document.getElementById('passcode-input');
+            const error = document.getElementById('passcode-error');
+
+            if (input.value.trim().toLowerCase() === PASSCODE.toLowerCase()) {
+                authenticated = true;
+                localStorage.setItem('authenticated', 'true');
+                error.classList.remove('visible');
+                input.classList.remove('error');
+
+                if (currentEnigma >= ENIGMAS.length) {
+                    showScreen('screen-final');
+                    renderFinal();
+                    launchConfetti();
+                } else if (currentEnigma === 0 && !localStorage.getItem('introDone')) {
+                    showScreen('screen-intro');
+                } else {
+                    showScreen('screen-enigma');
+                    renderEnigma();
+                }
+            } else {
+                input.classList.add('error');
+                error.classList.add('visible');
+                setTimeout(() => {
+                    input.classList.remove('error');
+                }, 500);
+            }
+        }
+
+        // ============================================================
+        //  ENIGMA
+        // ============================================================
+
+        function renderEnigma() {
+            const idx = currentEnigma;
+            document.getElementById('progress-label').textContent = `Énigme ${idx + 1} / ${ENIGMAS.length}`;
+            document.getElementById('progress-fill').style.width = `${(idx / ENIGMAS.length) * 100}%`;
+            document.getElementById('enigma-badge').textContent = `Énigme ${idx + 1}`;
+            document.getElementById('enigma-body').innerHTML = ENIGMAS[idx].html;
+            document.getElementById('answer-input').value = '';
+            document.getElementById('answer-error').classList.remove('visible');
+            document.getElementById('answer-success').classList.remove('visible');
+        }
+
+        function checkAnswer() {
+            const input = document.getElementById('answer-input');
+            const error = document.getElementById('answer-error');
+            const success = document.getElementById('answer-success');
+            const answer = input.value.trim().toLowerCase();
+            const expected = ENIGMAS[currentEnigma].answer.toLowerCase();
+
+            // Normalize accented characters for comparison
+            const normalize = (str) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+
+            if (normalize(answer) === normalize(expected)) {
+                error.classList.remove('visible');
+                success.classList.add('visible');
+                input.classList.remove('error');
+                miniConfetti();
+
+                currentEnigma++;
+                localStorage.setItem('enigmaProgress', currentEnigma.toString());
+
+                setTimeout(() => {
+                    if (currentEnigma >= ENIGMAS.length) {
+                        showScreen('screen-final');
+                        renderFinal();
+                        launchConfetti();
+                    } else {
+                        renderEnigma();
+                        success.classList.remove('visible');
+                    }
+                }, 1500);
+            } else {
+                input.classList.add('error');
+                error.classList.add('visible');
+                success.classList.remove('visible');
+                setTimeout(() => input.classList.remove('error'), 500);
+            }
+        }
+
+        // ============================================================
+        //  FINAL
+        // ============================================================
+
+        function renderFinal() {
+            document.getElementById('final-message').innerHTML = FINAL_MESSAGE;
+
+            const chipsContainer = document.getElementById('indices-chips');
+            chipsContainer.innerHTML = '';
+            ENIGMAS.forEach(e => {
+                const chip = document.createElement('span');
+                chip.className = 'indice-chip';
+                chip.textContent = e.answer.toUpperCase();
+                chipsContainer.appendChild(chip);
+            });
+        }
+
+        // ============================================================
+        //  CONFETTI
+        // ============================================================
+
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        let confettiPieces = [];
+        let confettiAnimating = false;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function createConfettiPiece(x, y) {
+            const colors = ['#7c3aed', '#ec4899', '#facc15', '#06b6d4', '#f97316', '#22c55e', '#ef4444', '#8b5cf6'];
+            return {
+                x: x || Math.random() * canvas.width,
+                y: y || -10,
+                w: Math.random() * 10 + 5,
+                h: Math.random() * 6 + 3,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                vx: (Math.random() - 0.5) * 8,
+                vy: Math.random() * 4 + 2,
+                rotation: Math.random() * 360,
+                rotationSpeed: (Math.random() - 0.5) * 12,
+                opacity: 1,
+                decay: Math.random() * 0.005 + 0.002
+            };
+        }
+
+        function animateConfetti() {
+            if (!confettiAnimating && confettiPieces.length === 0) return;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            confettiPieces.forEach((p, i) => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.08;
+                p.rotation += p.rotationSpeed;
+                p.opacity -= p.decay;
+
+                if (p.opacity <= 0 || p.y > canvas.height + 20) {
+                    confettiPieces.splice(i, 1);
+                    return;
+                }
+
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate((p.rotation * Math.PI) / 180);
+                ctx.globalAlpha = p.opacity;
+                ctx.fillStyle = p.color;
+                ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+                ctx.restore();
+            });
+
+            requestAnimationFrame(animateConfetti);
+        }
+
+        function miniConfetti() {
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            for (let i = 0; i < 60; i++) {
+                confettiPieces.push(createConfettiPiece(centerX, centerY));
+            }
+            confettiAnimating = true;
+            animateConfetti();
+        }
+
+        function launchConfetti() {
+            let rounds = 0;
+            const interval = setInterval(() => {
+                for (let i = 0; i < 30; i++) {
+                    confettiPieces.push(createConfettiPiece(Math.random() * canvas.width, -10));
+                }
+                confettiAnimating = true;
+                animateConfetti();
+                rounds++;
+                if (rounds > 15) clearInterval(interval);
+            }, 300);
+        }
+
+        // ============================================================
+        //  KEY HANDLER
+        // ============================================================
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const passcodeScreen = document.getElementById('screen-passcode');
+                const enigmaScreen = document.getElementById('screen-enigma');
+
+                if (passcodeScreen.classList.contains('active')) {
+                    checkPasscode();
+                } else if (enigmaScreen.classList.contains('active')) {
+                    checkAnswer();
+                }
+            }
+        });
+
+        // ============================================================
+        //  INIT
+        // ============================================================
+
+        function init() {
+            if (authenticated) {
+                if (currentEnigma >= ENIGMAS.length) {
+                    showScreen('screen-final');
+                    renderFinal();
+                } else {
+                    showScreen('screen-enigma');
+                    renderEnigma();
+                }
+            } else {
+                showScreen('screen-passcode');
+            }
+        }
+
+        // Start button from intro
+        document.querySelector('#screen-intro .btn').addEventListener('click', () => {
+            localStorage.setItem('introDone', 'true');
+            showScreen('screen-enigma');
+            renderEnigma();
+        });
+
+        init();
+    </script>
+</body>
+</html>
