@@ -463,18 +463,19 @@
         }
 
         .intro-list li {
-            padding: 8px 0;
+            padding: 8px 0 8px 28px;
             color: #374151;
             font-size: 0.95rem;
             list-style: none;
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
+            position: relative;
+            line-height: 1.6;
         }
 
         .intro-list li::before {
             content: '✨';
-            flex-shrink: 0;
+            position: absolute;
+            left: 0;
+            top: 8px;
         }
 
         /* Enigma number badge */
