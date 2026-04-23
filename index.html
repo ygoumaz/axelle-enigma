@@ -337,6 +337,33 @@
             color: #374151;
         }
 
+        /* Find the link */
+        .word-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .word-card {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 18px 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1e1b4b;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            transition: transform 0.2s ease;
+        }
+
+        .word-card:hover {
+            transform: translateY(-2px);
+        }
+
         /* Success message */
         .success-msg {
             display: none;
@@ -575,6 +602,33 @@
 
         const ENIGMAS = [
             {
+                answer: 'matin',
+                html: `
+                    <p style="color: #6b7280; font-size: 0.95rem; margin-bottom: 4px;">Quel mot relie ces quatre éléments ?</p>
+                    <div class="word-cards">
+                        <div class="word-card">🍞 Grille-pain</div>
+                        <div class="word-card">🛏️ Lit</div>
+                        <div class="word-card">🎒 Primaire</div>
+                        <div class="word-card">🧈 Gras</div>
+                    </div>
+                `
+            },
+            {
+                answer: 'eliot',
+                html: `
+                    <div class="enigma-content" style="border-left-color: var(--orange);">
+                        <p class="acrostic-line">Enfant, je rêvais de voyages lointains et d'aventures impossibles.</p>
+                        <p class="acrostic-line">Les étés passaient, chacun plus beau que le précédent.</p>
+                        <p class="acrostic-line">Il m'arrivait de m'endormir dehors, sous les étoiles.</p>
+                        <p class="acrostic-line">On m'appelait pour rentrer, mais je n'entendais rien.</p>
+                        <p class="acrostic-line">Tout ce que je voulais, c'était rester là, libre.</p>
+                    </div>
+                    <p style="color: #6b7280; font-size: 0.9rem; font-style: italic; margin-top: 12px;">
+                        La réponse se cache dans ces lignes.
+                    </p>
+                `
+            },
+            {
                 answer: 'mise',
                 html: `
                     <div class="cipher-text">BXHT</div>
@@ -635,31 +689,6 @@
                             Je suis l'âme du pain.
                         </div>
                     </div>
-                `
-            },
-            {
-                answer: 'matin',
-                html: `
-                    <div class="enigma-content" style="border-left-color: var(--turquoise);">
-                        <p>Selon la célèbre devinette du lion de pierre égyptien, un être change de posture au fil des heures du jour.</p>
-                        <p><strong>Je ne cherche pas cet être.</strong></p>
-                        <p>Je cherche le nom de cette première heure — celle où l'on avance encore à quatre appuis, bien avant que le soleil n'atteigne son zénith.</p>
-                    </div>
-                `
-            },
-            {
-                answer: 'eliot',
-                html: `
-                    <div class="enigma-content" style="border-left-color: var(--orange);">
-                        <p class="acrostic-line">Enfant, je rêvais de voyages lointains et d'aventures impossibles.</p>
-                        <p class="acrostic-line">Les étés passaient, chacun plus beau que le précédent.</p>
-                        <p class="acrostic-line">Il m'arrivait de m'endormir dehors, sous les étoiles.</p>
-                        <p class="acrostic-line">On m'appelait pour rentrer, mais je n'entendais rien.</p>
-                        <p class="acrostic-line">Tout ce que je voulais, c'était rester là, libre.</p>
-                    </div>
-                    <p style="color: #6b7280; font-size: 0.9rem; font-style: italic; margin-top: 12px;">
-                        La réponse se cache dans ces lignes.
-                    </p>
                 `
             }
         ];
